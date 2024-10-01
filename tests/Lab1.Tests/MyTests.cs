@@ -7,54 +7,54 @@ namespace Lab1.Tests;
 
 public class MyTests
 {
+    private readonly Train _train = new Train(1000000, 1000, 1);
+
+    private readonly CommonRail _commonRail = new CommonRail(100);
+
     [Fact]
     public void Test1()
     {
-        var train = new Train(1000000, 1000, 1);
         var forcedRail = new ForcedRail(100, 100000);
-        var commonRail = new CommonRail(100);
-
         var path = new Route(1000000);
         path.PartsOfPathway.Add(forcedRail);
-        path.PartsOfPathway.Add(commonRail);
+        path.PartsOfPathway.Add(_commonRail);
 
-        var expectedResult = new WayPassingResult(true, 2);
+        var expectedResult = new PathwayPassingResult(true, 2);
+        PathwayPassingResult actualResult = _train.TryPassWay(path);
 
-        Assert.Equal(expectedResult, train.TryPassWay(path));
+        Assert.Equal(expectedResult, actualResult);
     }
 
     [Fact]
     public void Test2()
     {
-        var train = new Train(1000000, 1000, 1);
         var forcedRail = new ForcedRail(100, 100000);
-        var commonRail = new CommonRail(100);
         var path = new Route(1);
 
         path.PartsOfPathway.Add(forcedRail);
-        path.PartsOfPathway.Add(commonRail);
+        path.PartsOfPathway.Add(_commonRail);
 
-        var expectedResult = new WayPassingResult(false, 2);
+        var expectedResult = new PathwayPassingResult(false, 2);
+        PathwayPassingResult actualResult = _train.TryPassWay(path);
 
-        Assert.Equal(expectedResult, train.TryPassWay(path));
+        Assert.Equal(expectedResult, actualResult);
     }
 
     [Fact]
     public void Test3()
     {
-        var train = new Train(1000000, 1000, 1);
         var forcedRail = new ForcedRail(100, 20000);
-        var commonRail = new CommonRail(100);
         var station = new Station(800, 200, 100);
         var path = new Route(1000);
         path.PartsOfPathway.Add(forcedRail);
-        path.PartsOfPathway.Add(commonRail);
+        path.PartsOfPathway.Add(_commonRail);
         path.PartsOfPathway.Add(station);
-        path.PartsOfPathway.Add(commonRail);
+        path.PartsOfPathway.Add(_commonRail);
 
-        var expectedResult = new WayPassingResult(true, 7);
+        var expectedResult = new PathwayPassingResult(true, 7);
+        PathwayPassingResult actualResult = _train.TryPassWay(path);
 
-        Assert.Equal(expectedResult, train.TryPassWay(path));
+        Assert.Equal(expectedResult, actualResult);
     }
 
     [Fact]
@@ -63,16 +63,16 @@ public class MyTests
         var train = new Train(1000000, 1, 1);
         var forcedRail = new ForcedRail(100, 2000);
         var station = new Station(1500, 200, 100);
-        var commonRail = new CommonRail(100);
-
         var path = new Route(1000);
+
         path.PartsOfPathway.Add(forcedRail);
         path.PartsOfPathway.Add(station);
-        path.PartsOfPathway.Add(commonRail);
+        path.PartsOfPathway.Add(_commonRail);
 
-        var expectedResult = new WayPassingResult(false, 1);
+        var expectedResult = new PathwayPassingResult(false, 1);
+        PathwayPassingResult actualResult = train.TryPassWay(path);
 
-        Assert.Equal(expectedResult, train.TryPassWay(path));
+        Assert.Equal(expectedResult, actualResult);
     }
 
     [Fact]
@@ -80,19 +80,18 @@ public class MyTests
     {
         var train = new Train(1000000, 100, 1);
         var forcedRail = new ForcedRail(100, 2000);
-        var commonRail = new CommonRail(100);
         var station = new Station(2000, 200, 100);
 
         var path = new Route(15);
         path.PartsOfPathway.Add(forcedRail);
-        path.PartsOfPathway.Add(commonRail);
+        path.PartsOfPathway.Add(_commonRail);
         path.PartsOfPathway.Add(station);
-        path.PartsOfPathway.Add(commonRail);
+        path.PartsOfPathway.Add(_commonRail);
 
-        var expectedResult =
-            new WayPassingResult(false, 7);
+        var expectedResult = new PathwayPassingResult(false, 7);
+        PathwayPassingResult actualResult = train.TryPassWay(path);
 
-        Assert.Equal(expectedResult, train.TryPassWay(path));
+        Assert.Equal(expectedResult, actualResult);
     }
 
     [Fact]
@@ -104,41 +103,38 @@ public class MyTests
         var forcedRail3 = new ForcedRail(100, 3000);
         var forcedRail4 = new ForcedRail(100, -2100);
         var station = new Station(30, 200, 100);
-        var commonRail = new CommonRail(100);
 
         var path = new Route(80);
         path.PartsOfPathway.Add(forcedRail1);
-        path.PartsOfPathway.Add(commonRail);
+        path.PartsOfPathway.Add(_commonRail);
         path.PartsOfPathway.Add(forcedRail2);
         path.PartsOfPathway.Add(station);
-        path.PartsOfPathway.Add(commonRail);
+        path.PartsOfPathway.Add(_commonRail);
         path.PartsOfPathway.Add(forcedRail3);
-        path.PartsOfPathway.Add(commonRail);
+        path.PartsOfPathway.Add(_commonRail);
         path.PartsOfPathway.Add(forcedRail4);
 
-        var expectedResult = new WayPassingResult(true, 15);
+        var expectedResult = new PathwayPassingResult(true, 15);
+        PathwayPassingResult actualResult = train.TryPassWay(path);
 
-        Assert.Equal(expectedResult, train.TryPassWay(path));
+        Assert.Equal(expectedResult, actualResult);
     }
 
     [Fact]
     public void Test7()
     {
-        var train = new Train(1000000, 1000, 1);
-        var commonRail = new CommonRail(100);
-
         var path = new Route(1000);
-        path.PartsOfPathway.Add(commonRail);
+        path.PartsOfPathway.Add(_commonRail);
 
-        var expectedResult = new WayPassingResult(false, 0);
+        var expectedResult = new PathwayPassingResult(false, 0);
+        PathwayPassingResult actualResult = _train.TryPassWay(path);
 
-        Assert.Equal(expectedResult, train.TryPassWay(path));
+        Assert.Equal(expectedResult, actualResult);
     }
 
     [Fact]
     public void Test8()
     {
-        var train = new Train(1000000, 100, 1);
         var forcedRail1 = new ForcedRail(100, 500);
         var forcedRail2 = new ForcedRail(100, -1000);
 
@@ -146,8 +142,9 @@ public class MyTests
         path.PartsOfPathway.Add(forcedRail1);
         path.PartsOfPathway.Add(forcedRail2);
 
-        var expectedResult = new WayPassingResult(false, 9);
+        var expectedResult = new PathwayPassingResult(false, 30);
+        PathwayPassingResult actualResult = _train.TryPassWay(path);
 
-        Assert.Equal(expectedResult, train.TryPassWay(path));
+        Assert.Equal(expectedResult, actualResult);
     }
 }

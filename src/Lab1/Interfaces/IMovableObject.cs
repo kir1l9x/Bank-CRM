@@ -5,7 +5,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Interfaces;
 
 public interface IMovableObject
 {
-    public WayPassingResult TryPassWay(Route route);
+    double Speed { get; }
 
-    public double Speed { get; protected set; }
+    PathwayPassingResult TryPassWay(Route route);
 }

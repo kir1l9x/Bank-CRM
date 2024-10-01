@@ -1,18 +1,23 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab1.Interfaces;
+﻿using Itmo.ObjectOrientedProgramming.Lab1.Ensures;
+using Itmo.ObjectOrientedProgramming.Lab1.Interfaces;
 using Itmo.ObjectOrientedProgramming.Lab1.Objects.MovableObjects;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Objects.StaticObjects;
 
 public class CommonRail : IPartOfPathway
 {
+    private readonly double _length;
+
     public CommonRail(double length)
     {
-        Length = length;
+        Ensure.Positive(length, nameof(length));
+
+        _length = length;
     }
 
     public bool TryPass(Train train)
     {
-        double remainingDistance = Length - train.RemainPassedDistance;
+        double remainingDistance = _length - train.RemainPassedDistance;
 
         return TryPassDistance(remainingDistance, train);
     }
@@ -48,6 +53,4 @@ public class CommonRail : IPartOfPathway
 
         return false;
     }
-
-    private double Length { get; init; }
 }

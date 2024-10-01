@@ -1,26 +1,24 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab1.Interfaces;
+﻿using Itmo.ObjectOrientedProgramming.Lab1.Ensures;
+using Itmo.ObjectOrientedProgramming.Lab1.Interfaces;
 using Itmo.ObjectOrientedProgramming.Lab1.Objects.MovableObjects;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Objects.StaticObjects;
 
 public class Station : IPartOfPathway
 {
+    public int PeopleAmount { get; set; }
+
+    public int PeopleBandwidth { get; init; }
+
+    private double TimeToLet { get; }
+
+    private double SpeedLimit { get; }
+
     public Station(double speedLimit, int peopleBandwidth, int peopleAmount)
     {
-        if (speedLimit < 0)
-        {
-            throw new ArgumentException("Speed limit cannot be negative.");
-        }
-
-        if (peopleAmount < 0)
-        {
-            throw new ArgumentException("People amount cannot be negative.");
-        }
-
-        if (peopleBandwidth < 0)
-        {
-            throw new ArgumentException("People bandwidth cannot be negative.");
-        }
+        Ensure.NonNegative(speedLimit, nameof(speedLimit));
+        Ensure.NonNegative(peopleAmount, nameof(peopleAmount));
+        Ensure.NonNegative(PeopleBandwidth, nameof(PeopleBandwidth));
 
         SpeedLimit = speedLimit;
         PeopleAmount = peopleAmount;
@@ -44,12 +42,4 @@ public class Station : IPartOfPathway
 
         return true;
     }
-
-    public int PeopleAmount { get; set; }
-
-    public int PeopleBandwidth { get; set; }
-
-    private double TimeToLet { get; }
-
-    private double SpeedLimit { get; }
 }

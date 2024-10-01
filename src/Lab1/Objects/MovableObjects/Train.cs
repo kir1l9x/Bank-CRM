@@ -1,4 +1,5 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab1.Interfaces;
+﻿using Itmo.ObjectOrientedProgramming.Lab1.Ensures;
+using Itmo.ObjectOrientedProgramming.Lab1.Interfaces;
 using Itmo.ObjectOrientedProgramming.Lab1.Objects.StaticObjects;
 using Itmo.ObjectOrientedProgramming.Lab1.ResultTypes;
 
@@ -6,22 +7,25 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Objects.MovableObjects;
 
 public class Train : IMovableObject
 {
+    public double MaxForce { get; }
+
+    public double Weight { get; }
+
+    public double Speed { get; set; }
+
+    public double Acceleration { get; protected internal set; }
+
+    public double Precision { get; }
+
+    public double TimeCounter { get; protected internal set; }
+
+    public double RemainPassedDistance { get; protected internal set; }
+
     public Train(double maxForce, double weight, double precision)
     {
-        if (maxForce <= 0)
-        {
-            throw new ArgumentException("Max force must be greater than zero.");
-        }
-
-        if (weight <= 0)
-        {
-            throw new ArgumentException("Weight must be greater than zero.");
-        }
-
-        if (precision <= 0)
-        {
-            throw new ArgumentException("Precision must be greater than zero.");
-        }
+        Ensure.Positive(maxForce, nameof(maxForce));
+        Ensure.Positive(weight, nameof(weight));
+        Ensure.Positive(precision, nameof(precision));
 
         MaxForce = maxForce;
         Weight = weight;
@@ -33,9 +37,9 @@ public class Train : IMovableObject
         RemainPassedDistance = 0;
     }
 
-    public WayPassingResult TryPassWay(Route route)
+    public PathwayPassingResult TryPassWay(Route route)
     {
-        var result = new WayPassingResult(true);
+        var result = new PathwayPassingResult(true);
         foreach (IPartOfPathway part in route.PartsOfPathway)
         {
             if (!part.TryPass(this))
@@ -54,18 +58,4 @@ public class Train : IMovableObject
         result.RealTime = time;
         return result;
     }
-
-    public double MaxForce { get; }
-
-    public double Weight { get; }
-
-    public double Speed { get; set; }
-
-    public double Acceleration { get; protected internal set; }
-
-    public double Precision { get; }
-
-    public double TimeCounter { get; protected internal set; }
-
-    public double RemainPassedDistance { get; protected internal set; }
 }

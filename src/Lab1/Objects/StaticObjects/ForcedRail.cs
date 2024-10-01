@@ -1,14 +1,21 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab1.Interfaces;
+﻿using Itmo.ObjectOrientedProgramming.Lab1.Ensures;
+using Itmo.ObjectOrientedProgramming.Lab1.Interfaces;
 using Itmo.ObjectOrientedProgramming.Lab1.Objects.MovableObjects;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Objects.StaticObjects;
 
 public class ForcedRail : IPartOfPathway
 {
+    private readonly double _force;
+
+    private readonly double _length;
+
     public ForcedRail(double length, double force)
     {
-        this.Length = length;
-        Force = force;
+        Ensure.Positive(length, nameof(length));
+
+        _length = length;
+        _force = force;
     }
 
     public bool TryPass(Train train)
@@ -18,25 +25,23 @@ public class ForcedRail : IPartOfPathway
             return false;
         }
 
-        double remainingDistance = Length - train.RemainPassedDistance;
+        double remainingDistance = _length - train.RemainPassedDistance;
 
         return TryPassDistance(remainingDistance, train);
     }
 
     private bool TryGiveForce(Train train)
     {
-        if (double.Abs(Force) > double.Abs(train.MaxForce))
+        if (double.Abs(_force) > double.Abs(train.MaxForce))
         {
             return false;
         }
 
-        double additionalAcceleration = Force / train.Weight;
+        double additionalAcceleration = _force / train.Weight;
         train.Acceleration += additionalAcceleration;
 
         return true;
     }
-
-    private double Length { get; init; }
 
     private bool TryPassDistance(double distance, Train train)
     {
@@ -72,6 +77,4 @@ public class ForcedRail : IPartOfPathway
 
         return false;
     }
-
-    private double Force { get; }
 }

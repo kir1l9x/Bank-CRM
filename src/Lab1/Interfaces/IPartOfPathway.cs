@@ -4,5 +4,5 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Interfaces;
 
 public interface IPartOfPathway
 {
-    public bool TryPass(Train train);
+    bool TryPass(Train train);
 }
