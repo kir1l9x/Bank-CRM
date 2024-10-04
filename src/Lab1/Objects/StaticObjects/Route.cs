@@ -1,20 +1,26 @@
 ﻿using Itmo.ObjectOrientedProgramming.Lab1.Interfaces;
+using Itmo.ObjectOrientedProgramming.Lab1.Objects.MovableObjects;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Objects.StaticObjects;
 
 public class Route
 {
-    public double SpeedLimit { get; }
-
-    public IList<IPartOfPathway> PartsOfPathway { get; } = [];
+    private readonly double _speedLimit;
 
     public Route(double speedLimit)
     {
-        SpeedLimit = speedLimit;
+        _speedLimit = speedLimit;
     }
 
-    public void AddPartOfPathway(IPartOfPathway p)
+    public IList<IPartOfPathway> PartsOfPathway { get; } = [];
+
+    public bool TryLetTrain(Train train)
     {
-        this.PartsOfPathway.Add(p);
+        if (train.Speed > _speedLimit)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

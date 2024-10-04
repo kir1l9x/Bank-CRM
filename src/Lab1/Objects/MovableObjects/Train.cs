@@ -7,19 +7,9 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Objects.MovableObjects;
 
 public class Train : IMovableObject
 {
-    public double MaxForce { get; }
+    private readonly double _maxForce;
 
-    public double Weight { get; }
-
-    public double Speed { get; set; }
-
-    public double Acceleration { get; protected internal set; }
-
-    public double Precision { get; }
-
-    public double TimeCounter { get; protected internal set; }
-
-    public double RemainPassedDistance { get; protected internal set; }
+    private readonly double _weight;
 
     public Train(double maxForce, double weight, double precision)
     {
@@ -27,35 +17,81 @@ public class Train : IMovableObject
         Ensure.Positive(weight, nameof(weight));
         Ensure.Positive(precision, nameof(precision));
 
-        MaxForce = maxForce;
-        Weight = weight;
+        _maxForce = maxForce;
+        _weight = weight;
         Precision = precision;
 
         Speed = 0;
-        Acceleration = 0;
-        TimeCounter = 0;
+        _acceleration = 0;
         RemainPassedDistance = 0;
     }
 
-    public PathwayPassingResult TryPassWay(Route route)
+    private double _acceleration;
+
+    public double Speed { get; private set; }
+
+    public double Precision { get; }
+
+    public double RemainPassedDistance { get; private set; }
+
+    public PassingResult TryPassWay(Route route)
     {
-        var result = new PathwayPassingResult(true);
+        var result = new PassingResult(true, 0);
         foreach (IPartOfPathway part in route.PartsOfPathway)
         {
-            if (!part.TryPass(this))
+            PassingResult currentPassingResult = part.TryPass(this);
+            bool currentSuccess = currentPassingResult.IsSuccessful;
+            double currentTime = currentPassingResult.RealTime;
+
+            result.RealTime += currentTime;
+
+            if (!currentSuccess)
             {
                 result.IsSuccessful = false;
                 break;
             }
         }
 
-        if (Speed > route.SpeedLimit)
+        if (!route.TryLetTrain(this))
         {
             result.IsSuccessful = false;
         }
 
-        double time = TimeCounter * Precision;
-        result.RealTime = time;
+        result.RealTime *= Precision;
         return result;
+    }
+
+    public bool TryApplyForce(double force)
+    {
+        if (double.Abs(force) > _maxForce)
+        {
+            return false;
+        }
+
+        double additionalAcceleration = force / _weight;
+        _acceleration += additionalAcceleration;
+
+        return true;
+    }
+
+    public void ChangeSpeed()
+    {
+        Speed += _acceleration * Precision;
+    }
+
+    public void UpdatePropertiesAfterForcedRail(double extraPassedDistance)
+    {
+        _acceleration = 0;
+        RemainPassedDistance = extraPassedDistance;
+    }
+
+    public void UpdatePropertiesAfterCommonRail(double extraPassedDistance)
+    {
+        RemainPassedDistance = extraPassedDistance;
+    }
+
+    public void UpdatePropertiesAfterStation()
+    {
+        RemainPassedDistance = 0;
     }
 }

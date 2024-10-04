@@ -7,5 +7,5 @@ public interface IMovableObject
 {
     double Speed { get; }
 
-    PathwayPassingResult TryPassWay(Route route);
+    PassingResult TryPassWay(Route route);
 }

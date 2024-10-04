@@ -1,6 +1,7 @@
 ﻿using Itmo.ObjectOrientedProgramming.Lab1.Ensures;
 using Itmo.ObjectOrientedProgramming.Lab1.Interfaces;
 using Itmo.ObjectOrientedProgramming.Lab1.Objects.MovableObjects;
+using Itmo.ObjectOrientedProgramming.Lab1.ResultTypes;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Objects.StaticObjects;
 
@@ -18,11 +19,11 @@ public class ForcedRail : IPartOfPathway
         _force = force;
     }
 
-    public bool TryPass(Train train)
+    public PassingResult TryPass(Train train)
     {
         if (!TryGiveForce(train))
         {
-            return false;
+            return new PassingResult(false, 0);
         }
 
         double remainingDistance = _length - train.RemainPassedDistance;
@@ -32,49 +33,46 @@ public class ForcedRail : IPartOfPathway
 
     private bool TryGiveForce(Train train)
     {
-        if (double.Abs(_force) > double.Abs(train.MaxForce))
-        {
-            return false;
-        }
-
-        double additionalAcceleration = _force / train.Weight;
-        train.Acceleration += additionalAcceleration;
-
-        return true;
+        return train.TryApplyForce(_force);
     }
 
-    private bool TryPassDistance(double distance, Train train)
+    private PassingResult TryPassDistance(double distance, Train train)
     {
+        var passingResult = new PassingResult(true, 0);
+
         if (distance <= 0)
         {
-            train.RemainPassedDistance = double.Abs(distance);
-            return true;
+            train.UpdatePropertiesAfterForcedRail(double.Abs(distance));
+            return passingResult;
         }
 
+        double timeCounter = 0;
         while (distance > 0)
         {
-            double currentSpeed = train.Speed + (train.Acceleration * train.Precision);
+            train.ChangeSpeed();
+            double currentSpeed = train.Speed;
             if (currentSpeed < 0)
             {
-                return false;
-
-                // throw new InvalidOperationException("Speed is negative");
+                passingResult.IsSuccessful = false;
+                passingResult.RealTime = timeCounter;
+                return passingResult;
             }
 
             double passedDistance = currentSpeed * train.Precision;
             distance -= passedDistance;
 
-            train.Speed = currentSpeed;
-            train.TimeCounter++;
+            timeCounter++;
 
             if (distance <= 0)
             {
-                train.RemainPassedDistance = double.Abs(distance);
-                train.Acceleration = 0;
-                return true;
+                train.UpdatePropertiesAfterForcedRail(double.Abs(distance));
+                passingResult.RealTime = timeCounter;
+                return passingResult;
             }
         }
 
-        return false;
+        passingResult.IsSuccessful = false;
+
+        return passingResult;
     }
 }
