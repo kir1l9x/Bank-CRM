@@ -15,8 +15,8 @@ public class MyTests
     public void ShouldPassRoute_WhenRouteLimitAcceptable_ReturnsTrainPassResultSuccess()
     {
         var acceptableSpeedLimitPath = new Route(1000000);
-        acceptableSpeedLimitPath.PartsOfPathway.Add(_forcedRail);
-        acceptableSpeedLimitPath.PartsOfPathway.Add(_commonRail);
+        acceptableSpeedLimitPath.AddPartOfPathway(_forcedRail);
+        acceptableSpeedLimitPath.AddPartOfPathway(_commonRail);
 
         var expectedResult = new PassingResult(true, 2);
         PassingResult actualResult = _train.TryPassWay(acceptableSpeedLimitPath);
@@ -29,8 +29,8 @@ public class MyTests
     {
         var unacceptableSpeedLimitPath = new Route(1);
 
-        unacceptableSpeedLimitPath.PartsOfPathway.Add(_forcedRail);
-        unacceptableSpeedLimitPath.PartsOfPathway.Add(_commonRail);
+        unacceptableSpeedLimitPath.AddPartOfPathway(_forcedRail);
+        unacceptableSpeedLimitPath.AddPartOfPathway(_commonRail);
 
         var expectedResult = new PassingResult(false, 2);
         PassingResult actualResult = _train.TryPassWay(unacceptableSpeedLimitPath);
@@ -44,10 +44,10 @@ public class MyTests
         var forcedRail = new ForcedRail(100, 20000);
         var station = new Station(800, 200, 100);
         var path = new Route(1000);
-        path.PartsOfPathway.Add(forcedRail);
-        path.PartsOfPathway.Add(_commonRail);
-        path.PartsOfPathway.Add(station);
-        path.PartsOfPathway.Add(_commonRail);
+        path.AddPartOfPathway(forcedRail);
+        path.AddPartOfPathway(_commonRail);
+        path.AddPartOfPathway(station);
+        path.AddPartOfPathway(_commonRail);
 
         var expectedResult = new PassingResult(true, 7);
         PassingResult actualResult = _train.TryPassWay(path);
@@ -63,9 +63,9 @@ public class MyTests
         var unacceptableSpeedLimitStation = new Station(1500, 200, 100);
         var path = new Route(1000);
 
-        path.PartsOfPathway.Add(forcedRail);
-        path.PartsOfPathway.Add(unacceptableSpeedLimitStation);
-        path.PartsOfPathway.Add(_commonRail);
+        path.AddPartOfPathway(forcedRail);
+        path.AddPartOfPathway(unacceptableSpeedLimitStation);
+        path.AddPartOfPathway(_commonRail);
 
         var expectedResult = new PassingResult(false, 1);
         PassingResult actualResult = veryLightTrain.TryPassWay(path);
@@ -84,14 +84,14 @@ public class MyTests
         var station = new Station(30, 200, 100);
 
         var path = new Route(80);
-        path.PartsOfPathway.Add(accelerationForcedRail1);
-        path.PartsOfPathway.Add(_commonRail);
-        path.PartsOfPathway.Add(decelerationForcedRail1);
-        path.PartsOfPathway.Add(station);
-        path.PartsOfPathway.Add(_commonRail);
-        path.PartsOfPathway.Add(accelerationForcedRail2);
-        path.PartsOfPathway.Add(_commonRail);
-        path.PartsOfPathway.Add(decelerationForcedRail2);
+        path.AddPartOfPathway(accelerationForcedRail1);
+        path.AddPartOfPathway(_commonRail);
+        path.AddPartOfPathway(decelerationForcedRail1);
+        path.AddPartOfPathway(station);
+        path.AddPartOfPathway(_commonRail);
+        path.AddPartOfPathway(accelerationForcedRail2);
+        path.AddPartOfPathway(_commonRail);
+        path.AddPartOfPathway(decelerationForcedRail2);
 
         var expectedResult = new PassingResult(true, 15);
         PassingResult actualResult = train.TryPassWay(path);
@@ -106,8 +106,8 @@ public class MyTests
         var doubleDecelerationForcedRail = new ForcedRail(100, -1000);
 
         var path = new Route(1000);
-        path.PartsOfPathway.Add(accelerationForcedRail);
-        path.PartsOfPathway.Add(doubleDecelerationForcedRail);
+        path.AddPartOfPathway(accelerationForcedRail);
+        path.AddPartOfPathway(doubleDecelerationForcedRail);
 
         var expectedResult = new PassingResult(false, 30);
         PassingResult actualResult = _train.TryPassWay(path);
@@ -123,10 +123,10 @@ public class MyTests
         var station = new Station(2000, 200, 100);
 
         var path = new Route(15);
-        path.PartsOfPathway.Add(forcedRail);
-        path.PartsOfPathway.Add(_commonRail);
-        path.PartsOfPathway.Add(station);
-        path.PartsOfPathway.Add(_commonRail);
+        path.AddPartOfPathway(forcedRail);
+        path.AddPartOfPathway(_commonRail);
+        path.AddPartOfPathway(station);
+        path.AddPartOfPathway(_commonRail);
 
         var expectedResult = new PassingResult(false, 7);
         PassingResult actualResult = train.TryPassWay(path);
@@ -138,7 +138,7 @@ public class MyTests
     public void ShouldNotPassAndNotStart_WhenStartIsCommonRailAndNoSpeedNoAcceleration_ReturnsTrainPassResultFail()
     {
         var path = new Route(1000);
-        path.PartsOfPathway.Add(_commonRail);
+        path.AddPartOfPathway(_commonRail);
 
         var expectedResult = new PassingResult(false, 0);
         PassingResult actualResult = _train.TryPassWay(path);

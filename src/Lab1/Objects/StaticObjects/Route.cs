@@ -7,12 +7,14 @@ public class Route
 {
     private readonly double _speedLimit;
 
+    private readonly List<IPartOfPathway> _partsOfPathway = [];
+
     public Route(double speedLimit)
     {
         _speedLimit = speedLimit;
     }
 
-    public IList<IPartOfPathway> PartsOfPathway { get; } = [];
+    public IReadOnlyList<IPartOfPathway> PartsOfPathway => _partsOfPathway;
 
     public bool TryLetTrain(Train train)
     {
@@ -22,5 +24,10 @@ public class Route
         }
 
         return true;
+    }
+
+    public void AddPartOfPathway(IPartOfPathway partOfPathway)
+    {
+        _partsOfPathway.Add(partOfPathway);
     }
 }
