@@ -11,22 +11,22 @@ public class Train : IMovableObject
 
     private readonly double _weight;
 
+    private double _acceleration;
+
     public Train(double maxForce, double weight, double precision)
     {
         Ensure.Positive(maxForce, nameof(maxForce));
         Ensure.Positive(weight, nameof(weight));
         Ensure.Positive(precision, nameof(precision));
 
-        _maxForce = maxForce;
-        _weight = weight;
-        Precision = precision;
-
         Speed = 0;
         _acceleration = 0;
         RemainPassedDistance = 0;
-    }
 
-    private double _acceleration;
+        _maxForce = maxForce;
+        _weight = weight;
+        Precision = precision;
+    }
 
     public double Speed { get; private set; }
 
