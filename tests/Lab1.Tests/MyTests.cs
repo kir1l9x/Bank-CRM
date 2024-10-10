@@ -18,21 +18,21 @@ public class MyTests
         acceptableSpeedLimitPath.AddPartOfPathway(_forcedRail);
         acceptableSpeedLimitPath.AddPartOfPathway(_commonRail);
 
-        var expectedResult = new PassingResult(true, 2);
+        var expectedResult = new PassingResult.Success(2);
         PassingResult actualResult = _train.TryPassWay(acceptableSpeedLimitPath);
 
         Assert.Equal(expectedResult, actualResult);
     }
 
     [Fact]
-    public void ShouldNotPassRoute_WhenRouteLimitUnacceptable_ReturnsTrainPassResultFail()
+    public void ShouldNotPassRoute_WhenRouteLimitUnacceptable_ReturnsTrainPassResultFailTooHighSpeedForRoute()
     {
         var unacceptableSpeedLimitPath = new Route(1);
 
         unacceptableSpeedLimitPath.AddPartOfPathway(_forcedRail);
         unacceptableSpeedLimitPath.AddPartOfPathway(_commonRail);
 
-        var expectedResult = new PassingResult(false, 2);
+        var expectedResult = new PassingResult.TooHighSpeedForRoute(2);
         PassingResult actualResult = _train.TryPassWay(unacceptableSpeedLimitPath);
 
         Assert.Equal(expectedResult, actualResult);
@@ -49,14 +49,14 @@ public class MyTests
         path.AddPartOfPathway(station);
         path.AddPartOfPathway(_commonRail);
 
-        var expectedResult = new PassingResult(true, 7);
+        var expectedResult = new PassingResult.Success(7);
         PassingResult actualResult = _train.TryPassWay(path);
 
         Assert.Equal(expectedResult, actualResult);
     }
 
     [Fact]
-    public void ShouldNotPassStation_WhenStationLimitsUnacceptable_ReturnsTrainPassResultFail()
+    public void ShouldNotPassStation_WhenStationLimitsUnacceptable_ReturnsTrainPassResultFailTooHighSpeedForStation()
     {
         var veryLightTrain = new Train(1000000, 1, 1);
         var forcedRail = new ForcedRail(100, 2000);
@@ -67,7 +67,7 @@ public class MyTests
         path.AddPartOfPathway(unacceptableSpeedLimitStation);
         path.AddPartOfPathway(_commonRail);
 
-        var expectedResult = new PassingResult(false, 1);
+        var expectedResult = new PassingResult.TooHighSpeedForStation(1);
         PassingResult actualResult = veryLightTrain.TryPassWay(path);
 
         Assert.Equal(expectedResult, actualResult);
@@ -93,14 +93,14 @@ public class MyTests
         path.AddPartOfPathway(_commonRail);
         path.AddPartOfPathway(decelerationForcedRail2);
 
-        var expectedResult = new PassingResult(true, 15);
+        var expectedResult = new PassingResult.Success(15);
         PassingResult actualResult = train.TryPassWay(path);
 
         Assert.Equal(expectedResult, actualResult);
     }
 
     [Fact]
-    public void ShouldNotPass_WhenFirstForcedRailAppliesAccelerationAndSecondAppliesDoubleDeceleration_ReturnsTrainPassResultFail()
+    public void ShouldNotPass_WhenFirstForcedRailAppliesAccelerationAndSecondAppliesDoubleDeceleration_ReturnsTrainPassResultFailSpeedLowerThenZero()
     {
         var accelerationForcedRail = new ForcedRail(100, 500);
         var doubleDecelerationForcedRail = new ForcedRail(100, -1000);
@@ -109,14 +109,14 @@ public class MyTests
         path.AddPartOfPathway(accelerationForcedRail);
         path.AddPartOfPathway(doubleDecelerationForcedRail);
 
-        var expectedResult = new PassingResult(false, 30);
+        var expectedResult = new PassingResult.SpeedLowerThenZero(30);
         PassingResult actualResult = _train.TryPassWay(path);
 
         Assert.Equal(expectedResult, actualResult);
     }
 
     [Fact]
-    public void ShouldPassStationShouldNotPassRoute_WhenSpeedReachesLowerStationLimitHigherRouteLimitAndDoNotDecelerate_ReturnsTrainPassResultFail()
+    public void ShouldPassStationShouldNotPassRoute_WhenSpeedReachesLowerStationLimitHigherRouteLimitAndDoNotDecelerate_ReturnsTrainPassResultFailTooHighSpeedForRoute()
     {
         var train = new Train(1000000, 100, 1);
         var forcedRail = new ForcedRail(100, 2000);
@@ -128,19 +128,19 @@ public class MyTests
         path.AddPartOfPathway(station);
         path.AddPartOfPathway(_commonRail);
 
-        var expectedResult = new PassingResult(false, 7);
+        var expectedResult = new PassingResult.TooHighSpeedForRoute(7);
         PassingResult actualResult = train.TryPassWay(path);
 
         Assert.Equal(expectedResult, actualResult);
     }
 
     [Fact]
-    public void ShouldNotPassAndNotStart_WhenStartIsCommonRailAndNoSpeedNoAcceleration_ReturnsTrainPassResultFail()
+    public void ShouldNotPassAndNotStart_WhenStartIsCommonRailAndNoSpeedNoAcceleration_ReturnsTrainPassResultFailSpeedIsNonPositiveOnCommonRail()
     {
         var path = new Route(1000);
         path.AddPartOfPathway(_commonRail);
 
-        var expectedResult = new PassingResult(false, 0);
+        var expectedResult = new PassingResult.SpeedIsNonPositiveOnCommonRail(0);
         PassingResult actualResult = _train.TryPassWay(path);
 
         Assert.Equal(expectedResult, actualResult);

@@ -23,7 +23,7 @@ public class ForcedRail : IPartOfPathway
     {
         if (!TryGiveForce(train))
         {
-            return new PassingResult(false, 0);
+            return new PassingResult.TooLargeForceToTrain(0);
         }
 
         double remainingDistance = _length - train.RemainPassedDistance;
@@ -38,12 +38,10 @@ public class ForcedRail : IPartOfPathway
 
     private PassingResult TryPassDistance(double distance, Train train)
     {
-        var passingResult = new PassingResult(true, 0);
-
         if (distance <= 0)
         {
             train.UpdatePropertiesAfterForcedRail(double.Abs(distance));
-            return passingResult;
+            return new PassingResult.Success(0);
         }
 
         double timeCounter = 0;
@@ -53,9 +51,7 @@ public class ForcedRail : IPartOfPathway
             double currentSpeed = train.Speed;
             if (currentSpeed < 0)
             {
-                passingResult.IsSuccessful = false;
-                passingResult.RealTime = timeCounter;
-                return passingResult;
+                return new PassingResult.SpeedLowerThenZero(timeCounter);
             }
 
             double passedDistance = currentSpeed * train.Precision;
@@ -66,13 +62,10 @@ public class ForcedRail : IPartOfPathway
             if (distance <= 0)
             {
                 train.UpdatePropertiesAfterForcedRail(double.Abs(distance));
-                passingResult.RealTime = timeCounter;
-                return passingResult;
+                return new PassingResult.Success(timeCounter);
             }
         }
 
-        passingResult.IsSuccessful = false;
-
-        return passingResult;
+        return new PassingResult.Failure(0);
     }
 }

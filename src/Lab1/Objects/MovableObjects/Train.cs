@@ -36,28 +36,29 @@ public class Train : IMovableObject
 
     public PassingResult TryPassWay(Route route)
     {
-        var result = new PassingResult(true, 0);
+        var result = new PassingResult.Success(0);
         foreach (IPartOfPathway part in route.PartsOfPathway)
         {
             PassingResult currentPassingResult = part.TryPass(this);
-            bool currentSuccess = currentPassingResult.IsSuccessful;
-            double currentTime = currentPassingResult.RealTime;
+            double currentTime = currentPassingResult.Time;
 
-            result.RealTime += currentTime;
+            result.Time += currentTime;
 
-            if (!currentSuccess)
+            if (currentPassingResult is not PassingResult.Success)
             {
-                result.IsSuccessful = false;
-                break;
+                currentPassingResult.Time = result.Time;
+                currentPassingResult.Time *= Precision;
+                return currentPassingResult;
             }
         }
 
         if (!route.TryLetTrain(this))
         {
-            result.IsSuccessful = false;
+            result.Time *= Precision;
+            return new PassingResult.TooHighSpeedForRoute(result.Time);
         }
 
-        result.RealTime *= Precision;
+        result.Time *= Precision;
         return result;
     }
 

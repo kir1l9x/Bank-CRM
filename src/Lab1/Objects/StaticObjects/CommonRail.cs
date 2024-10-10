@@ -25,11 +25,10 @@ public class CommonRail : IPartOfPathway
 
     private PassingResult TryPassDistance(double distance, Train train)
     {
-        var passingResult = new PassingResult(true, 0);
         if (distance <= 0)
         {
             train.UpdatePropertiesAfterCommonRail(double.Abs(distance));
-            return passingResult;
+            return new PassingResult.Success(0);
         }
 
         double timeCounter = 0;
@@ -38,8 +37,7 @@ public class CommonRail : IPartOfPathway
         {
             if (train.Speed <= 0)
             {
-                passingResult.IsSuccessful = false;
-                return passingResult;
+                return new PassingResult.SpeedIsNonPositiveOnCommonRail(0);
             }
 
             double passedDistance = currentSpeed * train.Precision;
@@ -50,13 +48,10 @@ public class CommonRail : IPartOfPathway
             if (distance <= 0)
             {
                 train.UpdatePropertiesAfterCommonRail(double.Abs(distance));
-                passingResult.RealTime = timeCounter;
-                return passingResult;
+                return new PassingResult.Success(timeCounter);
             }
         }
 
-        passingResult.IsSuccessful = false;
-
-        return passingResult;
+        return new PassingResult.Failure(0);
     }
 }

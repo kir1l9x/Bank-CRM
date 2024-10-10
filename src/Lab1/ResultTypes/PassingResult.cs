@@ -1,29 +1,46 @@
 ﻿namespace Itmo.ObjectOrientedProgramming.Lab1.ResultTypes;
 
-public class PassingResult
+public abstract record PassingResult
 {
-    public PassingResult(bool isSuccessful, double realTime)
+    private PassingResult(double time)
     {
-        IsSuccessful = isSuccessful;
-        RealTime = realTime;
+        Time = time;
     }
 
-    public bool IsSuccessful { get; protected internal set; }
+    public double Time { get; set; }
 
-    public double RealTime { get; protected internal set; }
-
-    public override bool Equals(object? obj)
+    public sealed record Success : PassingResult
     {
-        if (obj is PassingResult other)
-        {
-            return IsSuccessful == other.IsSuccessful && RealTime == other.RealTime;
-        }
-
-        return false;
+        public Success(double time) : base(time) { }
     }
 
-    public override int GetHashCode()
+    public sealed record Failure : PassingResult
     {
-        return HashCode.Combine(IsSuccessful, RealTime);
+        public Failure(double time) : base(time) { }
+    }
+
+    public sealed record SpeedLowerThenZero : PassingResult
+    {
+        public SpeedLowerThenZero(double time) : base(time) { }
+    }
+
+    public sealed record TooLargeForceToTrain : PassingResult
+    {
+        public TooLargeForceToTrain(double time) : base(time) { }
+    }
+
+    public sealed record TooHighSpeedForStation : PassingResult
+    {
+        public TooHighSpeedForStation(double time) : base(time) { }
+    }
+
+    public sealed record TooHighSpeedForRoute : PassingResult
+    {
+        public TooHighSpeedForRoute(double time) : base(time) { }
+    }
+
+    public sealed record SpeedIsNonPositiveOnCommonRail : PassingResult
+    {
+        public SpeedIsNonPositiveOnCommonRail(double time) : base(time) { }
     }
 }

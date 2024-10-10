@@ -32,15 +32,13 @@ public class Station : IPartOfPathway
     {
         if (!TryLetTrain(train.Speed))
         {
-            return new PassingResult(false, 0);
+            return new PassingResult.TooHighSpeedForStation(0);
         }
 
         train.UpdatePropertiesAfterStation();
         double timeToLet = _timeToLet / train.Precision;
 
-        var passingResult = new PassingResult(true, timeToLet);
-
-        return passingResult;
+        return new PassingResult.Success(timeToLet);
     }
 
     private bool TryLetTrain(double speed)
