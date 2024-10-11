@@ -14,11 +14,6 @@ public abstract record PassingResult
         public Success(double time) : base(time) { }
     }
 
-    public sealed record Failure : PassingResult
-    {
-        public Failure(double time) : base(time) { }
-    }
-
     public sealed record SpeedLowerThenZero : PassingResult
     {
         public SpeedLowerThenZero(double time) : base(time) { }

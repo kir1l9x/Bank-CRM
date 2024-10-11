@@ -18,12 +18,7 @@ public class Route
 
     public bool TryLetTrain(Train train)
     {
-        if (train.Speed > _speedLimit)
-        {
-            return false;
-        }
-
-        return true;
+        return train.Speed <= _speedLimit;
     }
 
     public void AddPartOfPathway(IPartOfPathway partOfPathway)

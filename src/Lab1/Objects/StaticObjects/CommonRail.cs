@@ -52,6 +52,6 @@ public class CommonRail : IPartOfPathway
             }
         }
 
-        return new PassingResult.Failure(0);
+        return new PassingResult.Success(0);
     }
 }

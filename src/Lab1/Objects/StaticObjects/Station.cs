@@ -18,13 +18,10 @@ public class Station : IPartOfPathway
         Ensure.NonNegative(PeopleBandwidth, nameof(PeopleBandwidth));
 
         _speedLimit = speedLimit;
-        PeopleAmount = peopleAmount;
         PeopleBandwidth = peopleBandwidth;
 
         _timeToLet = Convert.ToDouble(peopleAmount / peopleBandwidth);
     }
-
-    public int PeopleAmount { get; set; }
 
     public int PeopleBandwidth { get; init; }
 
@@ -43,11 +40,6 @@ public class Station : IPartOfPathway
 
     private bool TryLetTrain(double speed)
     {
-        if (speed > _speedLimit)
-        {
-            return false;
-        }
-
-        return true;
+        return speed <= _speedLimit;
     }
 }

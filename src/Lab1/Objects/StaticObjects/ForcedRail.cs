@@ -66,6 +66,6 @@ public class ForcedRail : IPartOfPathway
             }
         }
 
-        return new PassingResult.Failure(0);
+        return new PassingResult.Success(0);
     }
 }

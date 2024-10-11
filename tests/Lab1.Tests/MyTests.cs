@@ -145,4 +145,17 @@ public class MyTests
 
         Assert.Equal(expectedResult, actualResult);
     }
+
+    [Fact]
+    public void ShouldNotPassAndNotStart_WhenForcedRailTryGiveForceHigherThenTrainMaximum_ReturnsTrainPassResultTooLargeForceToTrain()
+    {
+        var forcedRail = new ForcedRail(100, 9999999);
+        var path = new Route(1000);
+        path.AddPartOfPathway(forcedRail);
+
+        var expectedResult = new PassingResult.TooLargeForceToTrain(0);
+        PassingResult actualResult = _train.TryPassWay(path);
+
+        Assert.Equal(expectedResult, actualResult);
+    }
 }
