@@ -5,30 +5,30 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Materials.LabWorks;
 
 public class LabWork
 {
+    private string _description;
+
+    private IReadOnlyList<string> _criterias;
+
     private LabWork(Guid id, string name, string description, int points, IUser user, Guid? baseId, IReadOnlyList<string> criterias)
     {
         Id = id;
         Name = name;
-        Description = description;
+        _description = description;
         Points = points;
         Owner = user;
         BaseId = baseId;
-        Criterias = criterias;
+        _criterias = criterias;
     }
 
     public Guid Id { get; }
 
     public string Name { get; private set; }
 
-    public string Description { get; private set; }
-
     public int Points { get; }
 
     public IUser Owner { get; }
 
     public Guid? BaseId { get; }
-
-    public IReadOnlyList<string> Criterias { get; private set; }
 
     public static LabWorksBuilder LabWorkBuilder(IUser user)
     {
@@ -39,8 +39,6 @@ public class LabWork
     {
         private readonly List<string> _criterias = [];
 
-        private Guid? _id;
-
         private string? _name;
 
         private string? _description;
@@ -48,12 +46,6 @@ public class LabWork
         private int? _points;
 
         private Guid? _baseId;
-
-        public LabWorksBuilder CreateId()
-        {
-            _id = Guid.NewGuid();
-            return this;
-        }
 
         public LabWorksBuilder SetName(string name)
         {
@@ -95,33 +87,33 @@ public class LabWork
 
         public LabWorkResult UpdateCriteria(LabWork labWork, IReadOnlyList<string> criteria)
         {
-            if (labWork.Owner != owner)
+            if (labWork.Owner.Id != owner.Id)
             {
                 return new LabWorkResult.UserIsNotOwner(labWork);
             }
 
-            labWork.Criterias = criteria;
+            labWork._criterias = criteria;
 
             return new LabWorkResult.Success(labWork);
         }
 
         public LabWorkResult UpdateDescription(LabWork labWork, string description)
         {
-            if (labWork.Owner != owner)
+            if (labWork.Owner.Id != owner.Id)
             {
                 return new LabWorkResult.UserIsNotOwner(labWork);
             }
 
             Ensure.NotEmpty(description, nameof(description));
 
-            labWork.Description = description;
+            labWork._description = description;
 
             return new LabWorkResult.Success(labWork);
         }
 
         public LabWorkResult UpdateName(LabWork labWork, string name)
         {
-            if (labWork.Owner != owner)
+            if (labWork.Owner.Id != owner.Id)
             {
                 return new LabWorkResult.UserIsNotOwner(labWork);
             }
@@ -136,7 +128,7 @@ public class LabWork
         public LabWork Build()
         {
             return new LabWork(
-                _id ?? Guid.NewGuid(),
+                Guid.NewGuid(),
                 _name ?? throw new ArgumentNullException(),
                 _description ?? throw new ArgumentNullException(),
                 _points ?? throw new ArgumentNullException(),
@@ -151,10 +143,10 @@ public class LabWork
         return new LabWork(
             Guid.NewGuid(),
             Name,
-            Description,
+            _description,
             Points,
             user,
             Id,
-            new List<string>(Criterias).AsReadOnly());
+            new List<string>(_criterias).AsReadOnly());
     }
 }

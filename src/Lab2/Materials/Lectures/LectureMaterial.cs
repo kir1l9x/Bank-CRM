@@ -5,27 +5,27 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Materials.Lectures;
 
 public class LectureMaterial
 {
+    private string _content;
+
+    private string _name;
+
+    private string _description;
+
     private LectureMaterial(Guid id, string name, string description, IUser user, Guid? baseId, string content)
     {
         Id = id;
-        Name = name;
-        Description = description;
+        _name = name;
+        _description = description;
         Owner = user;
         BaseId = baseId;
-        Content = content;
+        _content = content;
     }
 
     public Guid Id { get; }
 
-    public string Name { get; private set; }
-
-    public string Description { get; private set; }
-
     public IUser Owner { get; }
 
     public Guid? BaseId { get; }
-
-    public string Content { get; private set; }
 
     public static LectureMaterialsBuilder LectureMaterialBuilder(IUser user)
     {
@@ -34,8 +34,6 @@ public class LectureMaterial
 
     public class LectureMaterialsBuilder(IUser owner)
     {
-        private Guid? _id;
-
         private string? _name;
 
         private string? _description;
@@ -43,12 +41,6 @@ public class LectureMaterial
         private Guid? _baseId;
 
         private string? _content;
-
-        public LectureMaterialsBuilder CreateId()
-        {
-            _id = Guid.NewGuid();
-            return this;
-        }
 
         public LectureMaterialsBuilder SetName(string name)
         {
@@ -82,42 +74,42 @@ public class LectureMaterial
 
         public LectureResult UpdateName(LectureMaterial lecture, string name)
         {
-            if (lecture.Owner != owner)
+            if (lecture.Owner.Id != owner.Id)
             {
                 return new LectureResult.UserIsNotOwner(lecture);
             }
 
             Ensure.NotEmpty(name, nameof(name));
 
-            lecture.Name = name;
+            lecture._name = name;
 
             return new LectureResult.Success(lecture);
         }
 
         public LectureResult UpdateDescription(LectureMaterial lecture, string description)
         {
-            if (lecture.Owner != owner)
+            if (lecture.Owner.Id != owner.Id)
             {
                 return new LectureResult.UserIsNotOwner(lecture);
             }
 
             Ensure.NotEmpty(description, nameof(description));
 
-            lecture.Description = description;
+            lecture._description = description;
 
             return new LectureResult.Success(lecture);
         }
 
         public LectureResult UpdateContent(LectureMaterial lecture, string content)
         {
-            if (lecture.Owner != owner)
+            if (lecture.Owner.Id != owner.Id)
             {
                 return new LectureResult.UserIsNotOwner(lecture);
             }
 
             Ensure.NotEmpty(content, nameof(content));
 
-            lecture.Content = content;
+            lecture._content = content;
 
             return new LectureResult.Success(lecture);
         }
@@ -125,7 +117,7 @@ public class LectureMaterial
         public LectureMaterial Build()
         {
             return new LectureMaterial(
-                _id ?? Guid.NewGuid(),
+                Guid.NewGuid(),
                 _name ?? throw new ArgumentNullException(),
                 _description ?? throw new ArgumentNullException(),
                 owner,
@@ -138,10 +130,10 @@ public class LectureMaterial
     {
         return new LectureMaterial(
             Guid.NewGuid(),
-            Name,
-            Description,
+            _name,
+            _description,
             user,
             Id,
-            Content);
+            _content);
     }
 }

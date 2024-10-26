@@ -12,12 +12,14 @@ public class CreditSubject : ISubject
 
     private readonly List<LectureMaterial> _lectures = [];
 
+    private int _creditPoints;
+
     private CreditSubject(Guid id, string name, IUser user, int creditPoints, Guid? baseId, IReadOnlyList<LabWork> labWorks, IList<LectureMaterial> lectures)
     {
         Id = id;
         Name = name;
         Owner = user;
-        CreditPoints = creditPoints;
+        _creditPoints = creditPoints;
         BaseId = baseId;
         _labWorks = labWorks;
         _lectures = lectures.ToList();
@@ -28,8 +30,6 @@ public class CreditSubject : ISubject
     public string Name { get; private set; }
 
     public IUser Owner { get; }
-
-    public int CreditPoints { get; private set; }
 
     public Guid? BaseId { get; }
 
@@ -81,7 +81,7 @@ public class CreditSubject : ISubject
 
             Ensure.Positive(points, nameof(points));
 
-            subject.CreditPoints = points;
+            subject._creditPoints = points;
 
             return new SubjectResult.Success(subject);
         }
@@ -122,7 +122,7 @@ public class CreditSubject : ISubject
             Guid.NewGuid(),
             Name,
             user,
-            CreditPoints,
+            _creditPoints,
             Id,
             new List<LabWork>(_labWorks).AsReadOnly(),
             new List<LectureMaterial>(_lectures).AsReadOnly());

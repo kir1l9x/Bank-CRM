@@ -11,17 +11,9 @@ public abstract class BaseSubjectBuilder(IUser owner) : ISubjectBuilder
 
     private readonly List<LectureMaterial> _lectures = [];
 
-    private Guid? _id;
-
     private string? _name;
 
     protected int? Points { get; set; }
-
-    public ISubjectBuilder CreateId()
-    {
-        _id = Guid.NewGuid();
-        return this;
-    }
 
     public ISubjectBuilder SetName(string name)
     {
@@ -46,7 +38,7 @@ public abstract class BaseSubjectBuilder(IUser owner) : ISubjectBuilder
     public SubjectResult Build()
     {
         return Build(
-            _id ?? Guid.NewGuid(),
+            Guid.NewGuid(),
             _name ?? throw new ArgumentNullException(),
             owner,
             Points ?? throw new ArgumentNullException(),

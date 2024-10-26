@@ -12,12 +12,14 @@ public class ExamSubject : ISubject
 
     private readonly List<LectureMaterial> _lectures = [];
 
+    private readonly int _examPoints;
+
     private ExamSubject(Guid id, string name, IUser user, int examPoints, Guid? baseId, IReadOnlyList<LabWork> labWorks, IList<LectureMaterial> lectures)
     {
         Id = id;
         Name = name;
         Owner = user;
-        ExamPoints = examPoints;
+        _examPoints = examPoints;
         BaseId = baseId;
         _labWorks = labWorks;
         _lectures = lectures.ToList();
@@ -28,8 +30,6 @@ public class ExamSubject : ISubject
     public string Name { get; private set; }
 
     public IUser Owner { get; }
-
-    public int ExamPoints { get; }
 
     public Guid? BaseId { get; }
 
@@ -108,7 +108,7 @@ public class ExamSubject : ISubject
             Guid.NewGuid(),
             Name,
             user,
-            ExamPoints,
+            _examPoints,
             Id,
             new List<LabWork>(_labWorks).AsReadOnly(),
             new List<LectureMaterial>(_lectures).AsReadOnly());

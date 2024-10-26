@@ -14,14 +14,16 @@ public class MyTests
     public void ShouldBlockAccess_WhenNotOwnerTryChangeObject_ReturnsUserIsNotOwner()
     {
         var userOwner = new UniversityUser("Ivan");
-        var contextUserOwner = new ContextUser(userOwner);
-        var userService = new UserService(contextUserOwner);
 
-        LectureMaterial lectureMaterial = userService.CreateLectureMaterial("OOP", "Patterns", "Builder");
+        var controller = new Controller(userOwner);
 
-        IUser userNotOwner = userService.Login("Vova");
+        LectureMaterial lectureMaterial = controller.Lectures.CreateLectureMaterial("OOP", "Patterns", "Builder");
 
-        LectureResult actualResult = userService.UpdateLectureMaterialContent(lectureMaterial, "Factory");
+        IUser userNotOwner = controller.UserService.CreateUser("Vova");
+
+        controller.ChangeCurrentUser(userNotOwner);
+
+        LectureResult actualResult = controller.Lectures.UpdateLectureMaterialContent(lectureMaterial, "Factory");
 
         var expectedResult = new LectureResult.UserIsNotOwner(lectureMaterial);
 
@@ -33,12 +35,12 @@ public class MyTests
     public void ShouldContainBaseIdAfterClone_WhenOneObjectCloneSecond_ReturnsSuccess()
     {
         var user = new UniversityUser("Semen");
-        var contextUser = new ContextUser(user);
-        var userService = new UserService(contextUser);
 
-        LectureMaterial lectureMaterial = userService.CreateLectureMaterial("OOP", "Patterns", "Builder");
+        var controller = new Controller(user);
 
-        LectureMaterial lectureMaterial2 = userService.CloneCreateLectureMaterial(lectureMaterial);
+        LectureMaterial lectureMaterial = controller.Lectures.CreateLectureMaterial("OOP", "Patterns", "Builder");
+
+        LectureMaterial lectureMaterial2 = controller.Lectures.CloneCreateLectureMaterial(lectureMaterial);
 
         Guid? baseIdLectureMaterial2 = lectureMaterial2.BaseId;
 
@@ -52,20 +54,20 @@ public class MyTests
     public void ShouldBlockCreatingSubject_WhenSumOfPointsHigherThenHundred_Returns()
     {
         var user = new UniversityUser("Roma");
-        var contextUser = new ContextUser(user);
-        var userService = new UserService(contextUser);
+
+        var controller = new Controller(user);
 
         string criteria = "Cool";
         IList<string> criterias = new List<string> { criteria };
 
-        LectureMaterial lecture = userService.CreateLectureMaterial("OOP", "Patterns", "Builder");
+        LectureMaterial lecture = controller.Lectures.CreateLectureMaterial("OOP", "Patterns", "Builder");
         IList<LectureMaterial> lectures = new List<LectureMaterial> { lecture };
 
-        LabWork labWork1 = userService.CreateLabWork("First", "Bad", 40, criterias);
-        LabWork labWork2 = userService.CreateLabWork("Second", "Good", 40, criterias);
+        LabWork labWork1 = controller.LabWorks.CreateLabWork("First", "Bad", 40, criterias);
+        LabWork labWork2 = controller.LabWorks.CreateLabWork("Second", "Good", 40, criterias);
         IList<LabWork> labs = new List<LabWork> { labWork1, labWork2 };
 
-        SubjectResult subjectActualResult = userService.CreateExamSubject("OOP", labs, lectures, 52);
+        SubjectResult subjectActualResult = controller.Subjects.CreateExamSubject("OOP", labs, lectures, 52);
 
         SubjectResult subjectExpectedResult = new SubjectResult.SubjectMustHaveHundredPoints();
 
@@ -77,14 +79,14 @@ public class MyTests
     public void ShouldFindObject_WhenUserSearchLecture_ReturnsSuccessFound()
     {
         var user = new UniversityUser("Katya");
-        var contextUser = new ContextUser(user);
-        var userService = new UserService(contextUser);
 
-        LectureMaterial lecture = userService.CreateLectureMaterial("OOP", "Patterns", "Builder");
+        var controller = new Controller(user);
+
+        LectureMaterial lecture = controller.Lectures.CreateLectureMaterial("OOP", "Patterns", "Builder");
 
         Guid needToFind = lecture.Id;
 
-        LectureResult lectureFind = userService.GetLectureMaterial(needToFind);
+        LectureResult lectureFind = controller.Lectures.GetLectureMaterial(needToFind);
 
         LectureMaterial? actualResult = lectureFind.Material;
 
@@ -101,12 +103,12 @@ public class MyTests
     public void ShouldBrokeWhenFindingObject_WhenUserSearchLecture_ReturnsFailureFound()
     {
         var user = new UniversityUser("Katya");
-        var contextUser = new ContextUser(user);
-        var userService = new UserService(contextUser);
+
+        var controller = new Controller(user);
 
         var needToFind = Guid.NewGuid();
 
-        LectureResult lectureFindType = userService.GetLectureMaterial(needToFind);
+        LectureResult lectureFindType = controller.Lectures.GetLectureMaterial(needToFind);
 
         var expectedType = new LectureResult.FailureFound();
 
@@ -117,14 +119,16 @@ public class MyTests
     public void ShouldCloneWithNewOwner_WhenObjectClonedByNewUser_ReturnsSucess()
     {
         var originalOwner = new UniversityUser("Leha");
-        var contextUser = new ContextUser(originalOwner);
-        var userService = new UserService(contextUser);
 
-        LectureMaterial originalLecture = userService.CreateLectureMaterial("AAA", "BBB", "Punk");
+        var controller = new Controller(originalOwner);
 
-        IUser anotherUser = userService.Login("Max");
+        LectureMaterial originalLecture = controller.Lectures.CreateLectureMaterial("AAA", "BBB", "Punk");
 
-        LectureMaterial clonedLecture = userService.CloneCreateLectureMaterial(originalLecture);
+        IUser anotherUser = new UniversityUser("Max");
+
+        controller.ChangeCurrentUser(anotherUser);
+
+        LectureMaterial clonedLecture = controller.Lectures.CloneCreateLectureMaterial(originalLecture);
 
         IUser expectedOwner = anotherUser;
 
