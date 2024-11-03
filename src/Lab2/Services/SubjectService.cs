@@ -10,7 +10,6 @@ public class SubjectService(IUser user, ContextData contextData)
     public SubjectResult CreateCreditSubject(string subjectName, IList<LabWork> labWorks, IList<LectureMaterial> lectures, int points)
     {
         CreditSubject.CreditSubjectsBuilder builder = CreditSubject.CreditSubjectBuilder(user);
-
         builder.SetName(subjectName).SetPoints(points);
 
         foreach (LabWork labWork in labWorks)
@@ -39,7 +38,6 @@ public class SubjectService(IUser user, ContextData contextData)
     public SubjectResult CreateExamSubject(string subjectName, IList<LabWork> labWorks, IList<LectureMaterial> lectures, int points)
     {
         ExamSubject.ExamSubjectsBuilder builder = ExamSubject.ExamSubjectBuilder(user);
-
         builder.SetName(subjectName).SetPoints(points);
 
         foreach (LabWork labWork in labWorks)
@@ -68,7 +66,6 @@ public class SubjectService(IUser user, ContextData contextData)
     public ISubject CloneCreateCreditSubject(CreditSubject creditSubject)
     {
         ISubject result = creditSubject.Clone(user);
-
         contextData.SubjectsRepository.Add(result);
 
         return result;
@@ -77,7 +74,6 @@ public class SubjectService(IUser user, ContextData contextData)
     public ISubject CloneCreateExamSubject(ExamSubject examSubject)
     {
         ISubject result = examSubject.Clone(user);
-
         contextData.SubjectsRepository.Add(result);
 
         return result;
@@ -86,7 +82,6 @@ public class SubjectService(IUser user, ContextData contextData)
     public SubjectResult UpdateCreditSubjectName(CreditSubject subject, string name)
     {
         CreditSubject.CreditSubjectsBuilder builder = CreditSubject.CreditSubjectBuilder(user);
-
         SubjectResult result = builder.UpdateCreditSubjectName(subject, name);
 
         return result;
@@ -95,7 +90,6 @@ public class SubjectService(IUser user, ContextData contextData)
     public SubjectResult UpdateCreditSubjectPoints(CreditSubject subject, int points)
     {
         CreditSubject.CreditSubjectsBuilder builder = CreditSubject.CreditSubjectBuilder(user);
-
         SubjectResult result = builder.UpdateCreditPoints(subject, points);
 
         return result;
@@ -104,7 +98,6 @@ public class SubjectService(IUser user, ContextData contextData)
     public SubjectResult AddLectureToCreditSubject(CreditSubject subject, LectureMaterial lecture)
     {
         CreditSubject.CreditSubjectsBuilder builder = CreditSubject.CreditSubjectBuilder(user);
-
         SubjectResult result = builder.AddLecture(subject, lecture);
 
         return result;
@@ -113,7 +106,6 @@ public class SubjectService(IUser user, ContextData contextData)
     public SubjectResult UpdateExamSubjectName(ExamSubject subject, string name)
     {
         ExamSubject.ExamSubjectsBuilder builder = ExamSubject.ExamSubjectBuilder(user);
-
         SubjectResult result = builder.UpdateExamSubjectName(subject, name);
 
         return result;
@@ -122,7 +114,6 @@ public class SubjectService(IUser user, ContextData contextData)
     public SubjectResult AddLectureToExamSubject(ExamSubject subject, LectureMaterial lecture)
     {
         ExamSubject.ExamSubjectsBuilder builder = ExamSubject.ExamSubjectBuilder(user);
-
         SubjectResult result = builder.AddLecture(subject, lecture);
 
         return result;

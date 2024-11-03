@@ -2,18 +2,11 @@
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories;
 
-public class LectureMaterialRepository
+public class LectureMaterialRepository : BaseRepository<LectureMaterial, LectureResult>
 {
-    private readonly List<LectureMaterial> _lectureMaterials = [];
-
-    public void Add(LectureMaterial entity)
+    public override LectureResult GetById(Guid id)
     {
-        _lectureMaterials.Add(entity);
-    }
-
-    public LectureResult GetById(Guid id)
-    {
-        foreach (LectureMaterial lectureMaterial in _lectureMaterials)
+        foreach (LectureMaterial lectureMaterial in Items)
         {
             if (lectureMaterial.Id == id)
             {

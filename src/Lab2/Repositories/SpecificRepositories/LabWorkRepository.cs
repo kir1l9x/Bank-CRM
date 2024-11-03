@@ -2,18 +2,11 @@
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories;
 
-public class LabWorkRepository
+public class LabWorkRepository : BaseRepository<LabWork, LabWorkResult>
 {
-    private readonly List<LabWork> _labWorks = [];
-
-    public void Add(LabWork entity)
+    public override LabWorkResult GetById(Guid id)
     {
-        _labWorks.Add(entity);
-    }
-
-    public LabWorkResult GetById(Guid id)
-    {
-        foreach (LabWork labWork in _labWorks)
+        foreach (LabWork labWork in Items)
         {
             if (labWork.Id == id)
             {

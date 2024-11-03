@@ -10,7 +10,6 @@ public class EducationProgramService(IUser user, ContextData contextData)
     public EducationProgramResult CreateBachelorsEducationProgram(string name, IReadOnlyList<ITerm> terms)
     {
         var factory = new BachelorsProgramFactory(user);
-
         EducationProgramResult bachelorsProgram = factory.CreateEducationProgram(name, terms);
 
         if (bachelorsProgram is EducationProgramResult.Success)
@@ -27,7 +26,6 @@ public class EducationProgramService(IUser user, ContextData contextData)
     public EducationProgramResult CreateMasterEducationProgram(string name, IReadOnlyList<ITerm> terms)
     {
         var factory = new MasterProgramFactory(user);
-
         EducationProgramResult masterProgram = factory.CreateEducationProgram(name, terms);
 
         if (masterProgram is EducationProgramResult.Success)
@@ -44,7 +42,6 @@ public class EducationProgramService(IUser user, ContextData contextData)
     public EducationProgramResult CreatePostgraduateEducationProgram(string name, IReadOnlyList<ITerm> terms)
     {
         var factory = new PostgraduateProgramFactory(user);
-
         EducationProgramResult postgraduateProgram = factory.CreateEducationProgram(name, terms);
 
         if (postgraduateProgram is EducationProgramResult.Success)
@@ -64,7 +61,6 @@ public class EducationProgramService(IUser user, ContextData contextData)
         string providingCompanyName)
     {
         var factory = new CourseProgramFactory(user, providingCompanyName);
-
         EducationProgramResult courseProgram = factory.CreateEducationProgram(name, terms);
 
         if (courseProgram is EducationProgramResult.Success)
@@ -85,7 +81,6 @@ public class EducationProgramService(IUser user, ContextData contextData)
         string facultyName)
     {
         var factory = new BonusTrackProgramFactory(user, providingCompanyName, facultyName);
-
         EducationProgramResult bonusProgram = factory.CreateEducationProgram(name, terms);
 
         if (bonusProgram is EducationProgramResult.Success)

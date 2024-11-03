@@ -2,18 +2,11 @@
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories;
 
-public class SubjectRepository
+public class SubjectRepository : BaseRepository<ISubject, SubjectResult>
 {
-    private readonly List<ISubject> _subjects = [];
-
-    public void Add(ISubject entity)
+    public override SubjectResult GetById(Guid id)
     {
-        _subjects.Add(entity);
-    }
-
-    public SubjectResult GetById(Guid id)
-    {
-        foreach (ISubject subject in _subjects)
+        foreach (ISubject subject in Items)
         {
             if (subject.Id == id)
             {

@@ -2,18 +2,11 @@
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories;
 
-public class UserRepository
+public class UserRepository : BaseRepository<IUser, UserResult>
 {
-    private readonly List<IUser> _users = [];
-
-    public void Add(IUser entity)
+    public override UserResult GetById(Guid id)
     {
-        _users.Add(entity);
-    }
-
-    public UserResult GetById(Guid id)
-    {
-        foreach (IUser user in _users)
+        foreach (IUser user in Items)
         {
             if (user.Id == id)
             {

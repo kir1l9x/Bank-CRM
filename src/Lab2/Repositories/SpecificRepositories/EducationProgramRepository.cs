@@ -2,18 +2,11 @@
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories;
 
-public class EducationProgramRepository
+public class EducationProgramRepository : BaseRepository<IEducationProgram, EducationProgramResult>
 {
-    private readonly List<IEducationProgram> _educationPrograms = [];
-
-    public void Add(IEducationProgram entity)
+    public override EducationProgramResult GetById(Guid id)
     {
-        _educationPrograms.Add(entity);
-    }
-
-    public EducationProgramResult GetById(Guid id)
-    {
-        foreach (IEducationProgram educationProgram in _educationPrograms)
+        foreach (IEducationProgram educationProgram in Items)
         {
             if (educationProgram.Id == id)
             {

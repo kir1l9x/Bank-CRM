@@ -7,7 +7,6 @@ public class UserService(ContextData data)
     public IUser CreateUser(string name)
     {
         IUser user = new UniversityUser(name);
-
         data.UsersRepository.Add(user);
 
         return user;
