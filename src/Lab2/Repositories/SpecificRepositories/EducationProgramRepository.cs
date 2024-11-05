@@ -1,6 +1,6 @@
 ﻿using Itmo.ObjectOrientedProgramming.Lab2.EducationPrograms;
 
-namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories;
+namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories.SpecificRepositories;
 
 public class EducationProgramRepository : BaseRepository<IEducationProgram, EducationProgramResult>
 {

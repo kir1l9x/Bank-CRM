@@ -1,16 +1,16 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab2.Repositories;
+﻿using Itmo.ObjectOrientedProgramming.Lab2.Repositories.SpecificRepositories;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2;
 
 public class ContextData
 {
-    public LabWorkRepository LabWorksRepository { get; set; } = new LabWorkRepository();
+    public LabWorkRepository LabWorksRepository { get; } = new LabWorkRepository();
 
-    public LectureMaterialRepository LectureMaterialsRepository { get; set; } = new LectureMaterialRepository();
+    public LectureMaterialRepository LectureMaterialsRepository { get; } = new LectureMaterialRepository();
 
-    public EducationProgramRepository EducationProgramsRepository { get; set; } = new EducationProgramRepository();
+    public EducationProgramRepository EducationProgramsRepository { get;  } = new EducationProgramRepository();
 
-    public SubjectRepository SubjectsRepository { get; set; } = new SubjectRepository();
+    public SubjectRepository SubjectsRepository { get; } = new SubjectRepository();
 
     public UserRepository UsersRepository { get; set; } = new UserRepository();
 }

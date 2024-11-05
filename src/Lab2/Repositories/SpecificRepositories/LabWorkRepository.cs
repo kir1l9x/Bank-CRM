@@ -1,6 +1,6 @@
 ﻿using Itmo.ObjectOrientedProgramming.Lab2.Materials.LabWorks;
 
-namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories;
+namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories.SpecificRepositories;
 
 public class LabWorkRepository : BaseRepository<LabWork, LabWorkResult>
 {

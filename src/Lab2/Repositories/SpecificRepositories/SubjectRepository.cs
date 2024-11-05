@@ -1,6 +1,6 @@
 ﻿using Itmo.ObjectOrientedProgramming.Lab2.Subjects;
 
-namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories;
+namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories.SpecificRepositories;
 
 public class SubjectRepository : BaseRepository<ISubject, SubjectResult>
 {
