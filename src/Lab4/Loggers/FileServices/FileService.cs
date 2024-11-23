@@ -2,11 +2,16 @@
 
 public class FileService : IFileService
 {
-    private const string FilePath = @"C:\Users\darli\RiderProjects\kir1l9x\src\Lab4\Loggers\Logs.txt";
+    private readonly string _filePath;
 
-    public void WriteLog(string message, Exception? exception = null)
+    public FileService(string filePath)
     {
-        var writer = new StreamWriter(FilePath, true);
+        _filePath = filePath;
+    }
+
+    public void WriteLog(string message)
+    {
+        var writer = new StreamWriter(_filePath, true);
 
         writer.WriteLine(message);
         writer.Close();
@@ -14,11 +19,11 @@ public class FileService : IFileService
 
     public IReadOnlyList<string> CollectLogsToList()
     {
-        return File.ReadAllLines(FilePath);
+        return File.ReadAllLines(_filePath);
     }
 
     public void ClearLogs()
     {
-        File.WriteAllText(FilePath, string.Empty);
+        File.WriteAllText(_filePath, string.Empty);
     }
 }

@@ -19,7 +19,7 @@ public class Logger(IFileService fileService) : ILogger
             case LogLevel.Warning:
                 LogWarning(logMessage);
                 break;
-            case LogLevel.Error:
+            case LogLevel.Errors:
                 LogError(logMessage);
                 break;
             case LogLevel.Fatal:

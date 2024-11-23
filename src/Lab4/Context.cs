@@ -24,7 +24,7 @@ public class Context
     public Context(IFileSystem fileSystem)
     {
         FileSystem = fileSystem;
-        Tools = new ContextTools(new ConsoleReader(), new ConsoleWriter(), new Logger(new FileService()));
+        Tools = new ContextTools(new ConsoleReader(), new ConsoleWriter(), new Logger(new FileService(@"C:\Users\darli\RiderProjects\kir1l9x\src\Lab4\Loggers\Logs.txt")));
         CommandStarter = new CommandRunner(this);
         CommandParser = new ConsoleCommandParser(Tools, CommandHandler);
     }

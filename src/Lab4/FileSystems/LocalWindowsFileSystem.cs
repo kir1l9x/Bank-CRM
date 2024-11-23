@@ -19,12 +19,12 @@ public class LocalWindowsFileSystem : IFileSystem
 
     public TreeSignSetting TreeSigns { get; private set; } = new TreeSignSetting();
 
-    public LocalWindowsFileSystem(ISystemPath root)
+    public LocalWindowsFileSystem(ISystemPath root, string logFilePath)
     {
         Root = root;
         GoRoot = root;
 
-        Tools = new ContextTools(new ConsoleReader(), new ConsoleWriter(), new Logger(new FileService()));
+        Tools = new ContextTools(new ConsoleReader(), new ConsoleWriter(), new Logger(new FileService(logFilePath)));
     }
 
     public void Connect(ISystemPath root)
@@ -66,21 +66,21 @@ public class LocalWindowsFileSystem : IFileSystem
             CopyFile(subDir.FullName, newDestinationDir);
         }
 
-        Tools.Logger.Log($"Copied {sourceName} to {destName}", LogLevel.Info);
+        Tools.Logger.Log($"Copied {sourceName} to {destName}", new LogLevel.Info());
     }
 
     public void DeleteFile(string sourceName)
     {
         Directory.Delete(sourceName, true);
 
-        Tools.Logger.Log($"Deleted {sourceName}", LogLevel.Info);
+        Tools.Logger.Log($"Deleted {sourceName}", new LogLevel.Info());
     }
 
     public void RenameFile(string sourceName, string newFileName)
     {
         var file = new FileInfo(sourceName);
         file.MoveTo(Path.Combine(sourceName, newFileName));
-        Tools.Logger.Log($"Renamed {sourceName} to {newFileName}", LogLevel.Info);
+        Tools.Logger.Log($"Renamed {sourceName} to {newFileName}", new LogLevel.Info());
     }
 
     public void ShowFile(string sourceFileName)

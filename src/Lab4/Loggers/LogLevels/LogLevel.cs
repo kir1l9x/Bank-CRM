@@ -1,9 +1,34 @@
 ﻿namespace Itmo.ObjectOrientedProgramming.Lab4.Loggers.LogLevels;
 
-public enum LogLevel
+public abstract record LogLevel
 {
-    Info = 0,
-    Warning = 1,
-    Error = 2,
-    Fatal = 3,
+    public string LevelName { get; init; }
+
+    public int LevelNumber { get; init; }
+
+    private LogLevel(string levelName, int levelNumber)
+    {
+        LevelName = levelName;
+        LevelNumber = levelNumber;
+    }
+
+    public sealed record Info : LogLevel
+    {
+        public Info() : base("Info", 0) { }
+    }
+
+    public sealed record Warning : LogLevel
+    {
+        public Warning() : base("Warning", 1) { }
+    }
+
+    public sealed record Errors : LogLevel
+    {
+        public Errors() : base("Error", 2) { }
+    }
+
+    public sealed record Fatal : LogLevel
+    {
+        public Fatal() : base("Fatal", 3) { }
+    }
 }
