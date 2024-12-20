@@ -7,9 +7,24 @@
 
     <ItemGroup>
         <PackageReference Include="coverlet.collector"/>
+        <PackageReference Include="Crayon" />
         <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="Moq" />
+        <PackageReference Include="Npgsql" />
+        <PackageReference Include="NSubstitute" />
+        <PackageReference Include="Spectre.Console" />
         <PackageReference Include="xunit"/>
         <PackageReference Include="xunit.runner.visualstudio"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\ConsoleUI\ConsoleUI.csproj" />
+      <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
+      <ProjectReference Include="..\..\DataAccess\DataAccess.csproj" />
+      <ProjectReference Include="..\..\Entities\Entities.csproj" />
+      <ProjectReference Include="..\..\Interfaces\Interfaces.csproj" />
+      <ProjectReference Include="..\..\ServiceControllers\ServiceControllers.csproj" />
+      <ProjectReference Include="..\..\Services\Services.csproj" />
     </ItemGroup>
 
 </Project>
