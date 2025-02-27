@@ -1,0 +1,18 @@
+﻿version: '3.9'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=kir1l9x
+      - POSTGRES_PASSWORD=kitten
+      - POSTGRES_DB=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "127.0.0.1:5432:5432"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
